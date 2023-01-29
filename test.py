@@ -2,7 +2,7 @@ import torch.utils.data.distributed
 import torchvision.transforms as transforms
 from PIL import Image
 from torch.autograd import Variable
-import os
+import matplotlib.pyplot as plt
 
 print(f"torch version: {torch.__version__}")
 gup_availability = torch.cuda.is_available()
@@ -69,9 +69,13 @@ model.to(device)
 
 img_path = "/home/shiju/Desktop/EfficientNet-B0-GTSRB/data/gtsrb/GTSRB/Final_Test/Images/00003.ppm"
 img = Image.open(img_path)
+plt.imshow(img)
 img = transform(img)
 img.unsqueeze_(0)
 img = Variable(img).to(device)
 out = model(img)
 _, prediction = torch.max(out.data, 1)
-print(f"predict:{classes[prediction.data.item()]}")
+predicted_class = classes[prediction.data.item()]
+print(f"prediction: {predicted_class}")
+plt.title(f"prediction: {predicted_class}")
+plt.show()
